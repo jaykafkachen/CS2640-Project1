@@ -122,8 +122,8 @@ main:	# program entry
             li $v0, 11                  #syscall code  for printing character
             syscall
 
-            addi $t5, $t5, 1            #increment
-            addi $t0, $t0, 4
+            addi $t5, $t5, 1            #increment counter var t5
+            addi $t0, $t0, 4            #increment t0 to point to next array value address
             j printline
         endprintline:
 

@@ -1,0 +1,30 @@
+Enter int value: 1
+Enter int value: 2
+Enter int value: 3
+Enter int value: 4
+Enter int value: 5
+Enter int value: 6
+Enter int value: 7
+Enter int value: 8
+Enter int value: 9
+Enter int value: 10
+Enter int value: 11
+Enter int value: 12
+Enter int value: 13
+Enter int value: 14
+Enter int value: 15
+Enter int value: 16
+Enter int value: 17
+Enter int value: 18
+Enter int value: 19
+Enter int value: 20
+Ints entered: 
+20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 
+Enter a number of ints to print per line (<=20): 6
+Ints entered: 
+1 2 3 4 5 6 
+7 8 9 10 11 12 
+13 14 15 16 17 18 
+19 20 
+-- program is finished running --
+

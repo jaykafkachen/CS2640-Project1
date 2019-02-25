@@ -1,6 +1,6 @@
 # Who:  Jay Chen
-# What: one_per_line.asm
-# Why:  part 1 of project 1, prints 1 int per line 
+# What: single_line.asm
+# Why:  part 2 of project 1, prints all ints on 1 line 
 # When: due 3/1/19
 # How:  List the uses of registers
 #   $a0 - stores string or int to be printed to console
@@ -15,7 +15,7 @@
     array:      .space      80      #reserve 80 bytes (4byte word)*20 int values in array
     arraysize:  .word       20
     prompt:     .asciiz     "Enter int value: "
-    outprompt:  .asciiz     "Ints entered: \n"
+    outprompt:  .asciiz     "Ints entered: "
 
 .text
 .globl main
@@ -72,9 +72,9 @@ main:	# program entry
         li $v0, 1
         syscall
 
-        #print new line after int
-        li $a0, '\n'                 #ascii 32 for whitespace
-        li $v0, 11                   #syscall code  for printing character
+        #print space after int
+        li $a0, 32                  #ascii 32 for whitespace
+        li $v0, 11                  #syscall code  for printing character
         syscall
         
         addi $t0, $t0, 4

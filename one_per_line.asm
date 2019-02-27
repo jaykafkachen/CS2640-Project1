@@ -31,7 +31,7 @@ main:	# program entry
 
         #prompt for input
         la $t2, prompt              #load address to prompt string to t2
-        move $a0, $t2               #add address of prompt string from t3 to a0 for print syscall
+        move $a0, $t2               #add address of prompt string from t2 to a0 for print syscall
         li $v0, 4                   #load instruction into v0, code 4 to print string stored in a0
         syscall
 

@@ -9,9 +9,6 @@
 #   $t3 - stores counter var for when to change lines
 #   $t4 - stores number of ints to print per line (user input)
 
-#   $a0 - stores string or int to be printed to console
-#   $v0 - stores command from load instruction 
-
 .data
     array:          .space      80      #reserve 80 bytes (4byte word)*20 int values in array
     arraysize:      .word       20

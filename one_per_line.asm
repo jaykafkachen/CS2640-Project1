@@ -3,13 +3,9 @@
 # Why:  part 1 of project 1, prints 1 int per line 
 # When: due 3/1/19
 # How:  List the uses of registers
-#   $a0 - stores string or int to be printed to console
-#   $v0 - stores command from load instruction
 #   $t0 - stores starting address of array in memory
 #   $t1 - stores size of array, holds upperbound addr of array 
-#   $t2 - stores true/false values for loop
-#   $t3 - stores input/output prompts for printing to console
-#   $t4 - stores next int to be printed in output loop
+#   $t2 - stores true/false values for loop, input/output prompts for printing to console,next int to be printed in output loop
 
 .data
     array:      .space      80      #reserve 80 bytes (4byte word)*20 int values in array
@@ -27,14 +23,15 @@ main:	# program entry
     lw $t1, 0($t1)                  #t1 now holds value at addr it stored prev
     sll $t1, $t1, 2                 #shift t1 left by 2 (multiply by 2^2 = 4, now t1 is the offset 80
     addu $t1, $t0, $t1              #t1 = upperbound arr starting $t0 
-    la $t3, prompt                  #load address to prompt string to t3
+    
 
     inputloop:
         slt $t2, $t0, $t1           #set t2 true(1) if value at t0<t1, else t2 false(0)
         beq $t2, $0, endinputloop   #branch to endinputloop if t2 = 0, false
 
         #prompt for input
-        move $a0, $t3               #add address of prompt string from t3 to a0 for print syscall
+        la $t2, prompt              #load address to prompt string to t2
+        move $a0, $t2               #add address of prompt string from t3 to a0 for print syscall
         li $v0, 4                   #load instruction into v0, code 4 to print string stored in a0
         syscall
 
@@ -56,8 +53,8 @@ main:	# program entry
     
     
     #print output label
-    la $t3, outprompt              
-    move $a0, $t3
+    la $t2, outprompt              
+    move $a0, $t2
     li $v0, 4
     syscall
 
@@ -65,15 +62,15 @@ main:	# program entry
         slt $t2, $t0, $t1
         beq $t2, $0, endoutputloop
 
-        lw $t4, 0($t0)
+        lw $t2, 0($t0)
 
         #print integer
-        move $a0, $t4
+        move $a0, $t2
         li $v0, 1
         syscall
 
         #print new line after int
-        li $a0, '\n'                 #ascii 32 for whitespace
+        li $a0, '\n'                 #newline char
         li $v0, 11                   #syscall code  for printing character
         syscall
         

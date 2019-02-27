@@ -3,14 +3,14 @@
 # Why:  part 3 of project 1, prints all ints in reverse & w/ a variable number of line skips 
 # When: due 3/1/19
 # How:  List the uses of registers
-#   $a0 - stores string or int to be printed to console
-#   $v0 - stores command from load instruction
 #   $t0 - stores starting address of array in memory
 #   $t1 - stores size of array, holds upperbound addr of array 
-#   $t2 - stores true/false values for loop, next int to be printed in output loop
-#   $t3 - stores input/output prompts for printing to console, conditional for when to add newline
-#   $t4 - stores number of ints to print per line
-#   $t5 - stores counter var for when to change lines 
+#   $t2 - stores true/false values for loop, next int to be printed in output loop, input/output prompts for printing to console
+#   $t3 - stores counter var for when to change lines
+#   $t4 - stores number of ints to print per line (user input)
+
+#   $a0 - stores string or int to be printed to console
+#   $v0 - stores command from load instruction 
 
 .data
     array:          .space      80      #reserve 80 bytes (4byte word)*20 int values in array
@@ -30,14 +30,14 @@ main:	# program entry
     lw $t1, 0($t1)                  #t1 now holds value at addr it stored prev
     sll $t1, $t1, 2                 #shift t1 left by 2 (multiply by 2^2 = 4, now t1 is the offset 80
     addu $t1, $t0, $t1              #t1 = upperbound arr starting $t0 
-    la $t3, prompt                  #load address to prompt string to t3
-
+    
     inputloop_rev:
         slt $t2, $t0, $t1           #set t2 true(1) if value at t0<t1, else t2 false(0)
         beq $t2, $0, endinputloop   #branch to endinputloop if t2 = 0, false
 
         #prompt for input
-        move $a0, $t3               #add address of prompt string from t3 to a0 for print syscall
+        la $t2, prompt              #load address to prompt string to t2
+        move $a0, $t2               #add address of prompt string from t2 to a0 for print syscall
         li $v0, 4                   #load instruction into v0, code 4 to print string stored in a0
         syscall
 
@@ -52,8 +52,8 @@ main:	# program entry
     endinputloop: 
 
     #print output label
-    la $t3, outprompt           
-    move $a0, $t3
+    la $t2, outprompt           
+    move $a0, $t2
     li $v0, 4
     syscall
 
@@ -78,8 +78,8 @@ main:	# program entry
     endoutputloop_rev:
 
     #print prompt for number of ints
-    la $t3, prompt_lines              
-    move $a0, $t3
+    la $t2, prompt_lines              
+    move $a0, $t2
     li $v0, 4
     syscall
 
@@ -90,8 +90,8 @@ main:	# program entry
     move $t4, $v0                   #store number of lines in t4
 
     #print output label
-    la $t3, outprompt             
-    move $a0, $t3
+    la $t2, outprompt             
+    move $a0, $t2
     li $v0, 4
     syscall
 
@@ -102,39 +102,37 @@ main:	# program entry
     addu $t1, $t0, $t1              #t1 = upperbound arr starting $t0 
 
     outputloop_lines:
-        li $t5, 0                   #start/reset counter var t5 at 0
+        li $t3, 0                   #start/reset counter var t3 at 0
     # nested loop here
         printline:
-            slt $t2, $t0, $t1                   #check while t0 less than t1, still array to traverse
-            beq $t2, $0, endoutputloop_lines    #branch when reached end of array
-            lw $t2, 0($t0)                      #load current array value into t2
+            beq $t0, $t1, endoutputloop_lines   #branch if t0 equals t1, else still array to traverse
+            slt $t2, $t3, $t4                   #check if counter t3 less than t4, number of ints to print
+            beq $t2, $0, endprintline           #branch if printed specified number of ints
 
-            slt $t3, $t5, $t4                   #check if counter t5 less than t4, number of ints to print
-            beq $t3, $0, endprintline           #branch if printed specified number of ints
-    
+            lw $t2, 0($t0)                      #load current array value into t2
             #print integer
             move $a0, $t2
             li $v0, 1
             syscall
 
             #print space after int
-            li $a0, 32                  #ascii 32 for whitespace
-            li $v0, 11                  #syscall code  for printing character
+            li $a0, 32                         #ascii 32 for whitespace
+            li $v0, 11                         #syscall code  for printing character
             syscall
 
-            addi $t5, $t5, 1            #increment counter var t5
-            addi $t0, $t0, 4            #increment t0 to point to next array value address
+            addi $t3, $t3, 1                   #increment counter var t3
+            addi $t0, $t0, 4                   #increment t0 to point to next array value address
             j printline
         endprintline:
 
         #print newline after int
-        li $a0, '\n'                #char for newline
-        li $v0, 11                  #syscall code  for printing character
+        li $a0, '\n'                           #char for newline
+        li $v0, 11                             #syscall code  for printing character
         syscall
 
         j outputloop_lines 
     endoutputloop_lines:
 
 exit:
-    li $v0, 10		                # terminate the program
+    li $v0, 10		                           #terminate the program
     syscall

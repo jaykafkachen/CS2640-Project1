@@ -57,7 +57,7 @@ main:	# program entry
     la $t1, array                   #reset t1 to start address of array to countdown
 
     outputloop_rev:
-        beq $t1, $t0, endoutputloop_rev     #branch if t0 is greater or equal to t1 (starting array address) 
+        beq $t1, $t0, endoutputloop_rev     #branch if t0 is equal to t1 (starting array address) 
         sub $t0, $t0, 4                     #decrement t0 to point to next array address up
         lw $t2, 0($t0)                      #load int value at current array pos into t2
 
